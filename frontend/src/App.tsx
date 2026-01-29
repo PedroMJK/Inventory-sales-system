@@ -4,11 +4,17 @@ import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Clients from "./pages/Clients";
 import Sales from "./pages/Sales";
+import Login from "./pages/Login";
+import { ProtectedRoute } from "./auth/ProtectedRoute";
 
 export default function App() {
   return (
     <Routes>
-      <Route element={<Layout />}>
+      <Route path="/login" element={<Login />} />
+      <Route element={
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
         <Route path="/clients" element={<Clients />} />
