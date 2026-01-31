@@ -33,7 +33,7 @@ export default function ProductList({
 
          <tbody>
           {products.map((product) => (
-            <tr key={product._id} className="border-t">
+            <tr key={product.id} className="border-t">
               <td className="p-2">{product.name}</td>
               <td className="p-2 text-center">{product.category}</td>
               <td className="p-2 text-center">
@@ -50,7 +50,7 @@ export default function ProductList({
                 </button>
 
                 <button
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => handleDelete(product.id)}
                   className="text-red-600 hover:underline"
                 >
                   Delete

@@ -36,7 +36,7 @@ export default function ProductForm({
 
     const onSubmit = async (data: ProductFormData) => {
         if (initialData) {
-            await api.put(`/products/${initialData._id}`, data);
+            await api.put(`/products/${initialData.id}`, data);
         } else {
             await api.post("/products", data);
         }
