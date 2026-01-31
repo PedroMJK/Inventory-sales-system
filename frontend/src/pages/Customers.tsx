@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import api from "../api/axios"
+import { getCustomers } from "../services/customerService"
 import type { Customer } from "../types/Customer"
 
 
@@ -13,8 +13,8 @@ export default function Customers() {
 
     useEffect(() => {
         async function loadCustomers() {
-            const response = await api.get("/customers");
-            setCustomers(response.data);
+            const customers = await getCustomers();
+            setCustomers(customers);
         }
 
         loadCustomers();
