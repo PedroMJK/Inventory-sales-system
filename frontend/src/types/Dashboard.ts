@@ -1,5 +1,6 @@
 export interface DashboardData {
-    totalProducts: number,
-    totalSales: number,
-    lowStock: number,
+  totalSales: number;
+  totalRevenue: number;
+  totalProducts: number;
+  totalCustomers: number;
 }
