@@ -1,14 +1,14 @@
-import Client from "../models/Client.js";
+import Customer from "../models/Customer.js";
 
 
 export const createClient = async (req, res) => {
   try {
-    const client = await Client.create({
+    const customer = await Customer.create({
       ...req.body,
       createdBy: req.user._id
     });
 
-    res.status(201).json(client);
+    res.status(201).json(customer);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -16,8 +16,8 @@ export const createClient = async (req, res) => {
 
 export const getClients = async (req, res) => {
     try {
-        const clients = Client.find();
-        res.json(clients)
+        const customers = Customer.find();
+        res.json(customers)
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
