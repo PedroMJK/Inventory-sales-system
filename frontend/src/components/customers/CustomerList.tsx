@@ -9,7 +9,7 @@ export default function CustomerList({ customers}: CustomerListProps) {
         <ul>
             {customers.map((customer) => (
                 <li
-                    key={customer._id}
+                    key={customer.id}
                     className="border p-3 rounded flex flex-col"
                 >
                     <strong>{customer.name}</strong>

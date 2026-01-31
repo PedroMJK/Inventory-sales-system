@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import api from "../../api/axios";
+import { createCustomer } from "../../services/customerService";
 
 interface CustomerFormProps {
     onCreated: () => void;
@@ -15,7 +15,7 @@ export default function CustomerForm ({ onCreated }: CustomerFormProps) {
     const { register, handleSubmit, reset } = useForm<CustomerFormData>();
 
     async function onSubmit(data: CustomerFormData) {
-        await api.post("/customers", data);
+        await createCustomer(data);
         reset();
         onCreated();
     }
