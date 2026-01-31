@@ -1,9 +1,13 @@
 export interface SaleItem {
-    product: string;
+    productId: string;
     quantity: number;
+    price: number;
 }
 
 export interface Sale {
-    client: string;
+    id: string;
+    customerId: string;
     items: SaleItem[];
+    total: number;
+    createdAt: string;
 };
