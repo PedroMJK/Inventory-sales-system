@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
-import Clients from "./pages/Customers";
+import Customers from "./pages/Customers";
 import Sales from "./pages/Sales";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
@@ -17,7 +17,7 @@ export default function App() {
         </ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/clients" element={<Clients />} />
+        <Route path="/customers" element={<Customers />} />
         <Route path="/sales" element={<Sales />} />
       </Route>
     </Routes>
