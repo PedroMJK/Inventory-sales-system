@@ -9,12 +9,20 @@ import CustomerList from "../components/customers/CustomerList"
 
 export default function Customers() {
     const [customers, setCustomers] = useState<Customer[]>([]);
+    const [loading, setLoading] = useState(true);
     const [reload, setReload] = useState(false);
 
     useEffect(() => {
         async function loadCustomers() {
-            const customers = await getCustomers();
-            setCustomers(customers);
+            try {
+                setLoading(true);
+                const customers = await getCustomers();
+                setCustomers(customers);
+            } catch (error) {
+                console.error("Error loading customers", error);
+            } finally {
+                setLoading(false);
+            }
         }
 
         loadCustomers();
@@ -26,8 +34,12 @@ export default function Customers() {
                 Customers
             </h2>
 
-            <CustomerForm onCreated={() => setReload(!reload)} />
-            <CustomerList customers={customers} />
+            <CustomerForm onCreated={() => setReload((prev) => !prev)} />
+                {loading ? (
+                    <p className="text-gray-500">Loading customers...</p>
+                ) : (
+                    <CustomerList customers={customers} />
+                )}
         </div>
     )
 }
