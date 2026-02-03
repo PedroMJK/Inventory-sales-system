@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 import { getProducts } from "../../services/productService";
+import { createSale } from "../../services/salesService";
+
 import type { Customer } from "../../types/Customer";
 import type { Product } from "../../types/Product";
 
@@ -31,7 +33,7 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        await api.post("/sales", {
+        await createSale({
             customerId,
             items: [
                 {
