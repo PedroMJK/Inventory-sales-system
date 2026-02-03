@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import api from "../api/axios"
 import type { Sale } from "../types/Sale"
+
+import { getSales } from "../services/salesService"
 
 import SaleForm from "../components/sales/SaleForm"
 import SaleList from "../components/sales/SaleList"
@@ -11,8 +12,8 @@ export default function Sales() {
 
     useEffect(() => {
         async function loadSales() {
-            const response = await api.get("/sales");
-            setSales(response.data);
+            const data = await getSales()
+            setSales(data)
         }
 
         loadSales();
