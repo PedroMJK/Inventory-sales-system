@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import api from "../../api/axios";
+import { useEffect, useMemo, useState } from "react";
 import { getProducts } from "../../services/productService";
 import { createSale } from "../../services/salesService";
 import { getCustomers } from "../../services/customerService";
@@ -41,7 +40,11 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
     loadData();
   }, []);
 
-  function updateItem(index: number, field: keyof SaleItemForm, value: any) {
+  function updateItem(
+    index: number,
+    field: keyof SaleItemForm,
+    value: any
+  ) {
     setItems((prev) =>
       prev.map((item, i) =>
         i === index ? { ...item, [field]: value } : item
@@ -56,6 +59,20 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
   function removeItem(index: number) {
     setItems((prev) => prev.filter((_, i) => i !== index));
   }
+
+  const itemsWithPrice = useMemo(() => {
+    return items.map((item) => {
+      const product = products.find((p) => p.id === item.productId);
+      const price = product?.price ?? 0;
+      const subtotal = price * item.quantity;
+
+      return { ...item, price, subtotal };
+    });
+  }, [items, products]);
+
+  const total = useMemo(() => {
+    return itemsWithPrice.reduce((sum, item) => sum + item.subtotal, 0);
+  }, [itemsWithPrice]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -85,12 +102,12 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5 bg-white p-5 rounded-lg border">
       {/* Customer */}
       <select
         value={customerId}
         onChange={(e) => setCustomerId(e.target.value)}
-        className="w-full border p-2 rounded"
+        className="w-full border p-2 rounded cursor-pointer"
         required
       >
         <option value="">Select customer</option>
@@ -102,14 +119,14 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
       </select>
 
       {/* Items */}
-      {items.map((item, index) => (
-        <div key={index} className="flex gap-2 items-center">
+      {itemsWithPrice.map((item, index) => (
+        <div key={index} className="grid grid-cols-12 gap-2 items-center">
           <select
             value={item.productId}
             onChange={(e) =>
               updateItem(index, "productId", e.target.value)
             }
-            className="flex-1 border p-2 rounded"
+            className="col-span-5 border p-2 rounded cursor-pointer"
             required
           >
             <option value="">Product</option>
@@ -127,14 +144,22 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
             onChange={(e) =>
               updateItem(index, "quantity", Number(e.target.value))
             }
-            className="w-24 border p-2 rounded"
+            className="col-span-2 border p-2 rounded text-center"
           />
+
+          <div className="col-span-2 text-sm text-gray-600 text-right">
+            ${item.price.toFixed(2)}
+          </div>
+
+          <div className="col-span-2 font-medium text-right">
+            ${item.subtotal.toFixed(2)}
+          </div>
 
           {items.length > 1 && (
             <button
               type="button"
               onClick={() => removeItem(index)}
-              className="text-red-600 font-bold text-lg cursor-pointer"
+              className="col-span-1 text-red-600 font-bold cursor-pointer"
             >
               ×
             </button>
@@ -142,23 +167,31 @@ export default function SaleForm({ onCreated }: SaleFormProps) {
         </div>
       ))}
 
+      {/* Footer */}
       <div className="flex justify-between items-center pt-4 border-t">
         <button
-            type="button"
-            onClick={addItem}
-            className="text-base text-blue-600 cursor-pointer "
+          type="button"
+          onClick={addItem}
+          className="text-blue-600 text-sm cursor-pointer"
         >
-            + Add product
+          + Add product
         </button>
 
-        <button
-            type="submit"
-            disabled={loading}
-            className="bg-green-600 text-white px-4 py-2 hover:bg-green-700 rounded disabled:opacity-50 cursor-pointer"
-        >
-            {loading ? "Creating..." : "Create sale"}
-        </button>
+        <div className="text-right">
+          <div className="text-sm text-gray-500">Total</div>
+          <div className="text-xl font-bold text-green-600">
+            ${total.toFixed(2)}
+          </div>
+        </div>
       </div>
+
+      <button
+        type="submit"
+        disabled={loading || total === 0}
+        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50 cursor-pointer"
+      >
+        {loading ? "Creating sale..." : "Create sale"}
+      </button>
     </form>
   );
 }
