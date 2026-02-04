@@ -1,8 +1,12 @@
 import { useForm } from "react-hook-form";
 import { createCustomer } from "../../services/customerService";
+import type { Customer } from "../../types/Customer";
+import { useEffect } from "react";
 
 interface CustomerFormProps {
-    onCreated: () => void;
+    onSubmit: (data: Omit<Customer, "id" | "createdAt">) => void;
+    customer?: Customer | null;
+    onCancel?: () => void;
 }
 
 interface CustomerFormData {
@@ -11,17 +15,32 @@ interface CustomerFormData {
     phone?: string;
 }
 
-export default function CustomerForm ({ onCreated }: CustomerFormProps) {
+export default function CustomerForm ({ 
+    onSubmit,
+    customer,
+    onCancel, 
+}: CustomerFormProps) {
     const { register, handleSubmit, reset } = useForm<CustomerFormData>();
 
-    async function onSubmit(data: CustomerFormData) {
-        await createCustomer(data);
-        reset();
-        onCreated();
+   useEffect(() => {
+    if (customer) {
+        reset({
+            name: customer.name,
+            email: customer.email,
+            phone: customer.phone,
+        });
+    } else {
+        reset({ name: "", email: "", phone: "" });
     }
+   }, [customer, reset]);
+
+   async function handleFormSubmit(data: CustomerFormData) {
+    await onSubmit(data);
+    if (!customer) reset();
+   }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
             <input 
                 {...register("name")}
                 placeholder="Customer name"
@@ -43,12 +62,25 @@ export default function CustomerForm ({ onCreated }: CustomerFormProps) {
                 className="w-full border p-2 rounded"
             />
 
-            <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
-            >
-                Add customer
-            </button>
+            <div className="flex gap-2">
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+                >
+                    {customer ? "Update customer" : "Add customer"}
+                </button>
+
+                {customer && (
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        className="bg-red-600 text-white border px-4 py-2 rounded cursor-pointer hover:bg-red-700"
+                    >
+                        Cancel
+                    </button>
+                )}
+            </div>
+
 
         </form>
     )
