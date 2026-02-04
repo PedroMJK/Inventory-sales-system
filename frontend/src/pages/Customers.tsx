@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getCustomers } from "../services/customerService";
+import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from "../services/customerService";
 import type { Customer } from "../types/Customer";
 
 import CustomerForm from "../components/customers/CustomerForm";
@@ -14,6 +14,8 @@ export default function Customers() {
 
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
     async function loadCustomers() {
@@ -52,13 +54,35 @@ export default function Customers() {
     setPage(1);
   }, [search]);
 
+  async function handleSubmit(data: Omit<Customer, "id" | "createdAt">) {
+    if (editingCustomer) {
+        await updateCustomer(editingCustomer.id, data);
+        setEditingCustomer(null);
+    } else {
+        await createCustomer(data);
+    }
+
+    setReload((prev) => !prev);
+  }
+
+  async function handleDelete(id: string) {
+    if (!window.confirm("Do you really want to delete this customer?")) return;
+
+    await deleteCustomer(id);
+    setReload((prev) => !prev);
+  }
+
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold">Customers</h2>
 
       
 
-      <CustomerForm onCreated={() => setReload((prev) => !prev)} />
+      <CustomerForm 
+        onSubmit={handleSubmit}
+        customer={editingCustomer}
+        onCancel={() => setEditingCustomer(null)}
+      />
 
     {/* Search */}
         <input
@@ -72,7 +96,11 @@ export default function Customers() {
         <p className="text-gray-500">Loading customers...</p>
       ) : (
         <>
-          <CustomerList customers={paginatedCustomers} />
+          <CustomerList 
+            customers={paginatedCustomers} 
+            onEdit={setEditingCustomer}
+            onDelete={handleDelete}
+        />
 
           
 
