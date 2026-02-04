@@ -32,4 +32,4 @@ const clientSchema = new mongoose.Schema(
     }
 )
 
-export default mongoose.model("Client", clientSchema);
+export default mongoose.model("Customer", clientSchema);
