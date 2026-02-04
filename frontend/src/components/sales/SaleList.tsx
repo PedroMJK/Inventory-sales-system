@@ -5,14 +5,6 @@ interface SaleListProps {
 }
 
 export default function SaleList({ sales }: SaleListProps) {
-  if (sales.length === 0) {
-    return (
-      <p className="text-gray-500 text-sm">
-        No sales registered yet.
-      </p>
-    );
-  }
-
   return (
     <ul className="space-y-4">
       {sales.map((sale) => (
