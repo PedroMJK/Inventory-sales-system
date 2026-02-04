@@ -9,6 +9,7 @@ interface CustomerFromApi {
   createdAt: string;
 }
 
+//  GET ALL
 export async function getCustomers(): Promise<Customer[]> {
     const res = await api.get("/clients");
 
@@ -21,10 +22,28 @@ export async function getCustomers(): Promise<Customer[]> {
     }));
 }
 
+// CREATE
 export async function createCustomer(data: {
     name: string;
     email: string;
     phone?: string;
 }) {
     await api.post("/clients", data);
+}
+
+// UPDATE
+export async function updateCustomer(
+    id: string,
+    data: {
+        name: string,
+        email: string,
+        phone?: string,
+    }
+) {
+    await api.put(`/clients/${id}`, data)
+}
+
+// DELETE
+export async function deleteCustomer(id: string) {
+    await api.delete(`/clients/${id}`);
 }
