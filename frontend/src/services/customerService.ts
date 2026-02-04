@@ -10,7 +10,7 @@ interface CustomerFromApi {
 }
 
 export async function getCustomers(): Promise<Customer[]> {
-    const res = await api.get("/customers");
+    const res = await api.get("/clients");
 
     return res.data.map((c: CustomerFromApi) => ({
         id: c._id,
@@ -26,5 +26,5 @@ export async function createCustomer(data: {
     email: string;
     phone?: string;
 }) {
-    await api.post("/customer", data);
+    await api.post("/clients", data);
 }
