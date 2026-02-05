@@ -8,12 +8,12 @@ export async function getSales(): Promise<Sale[]> {
 
     return response.data.map((sale) => ({
         id: sale._id,
-        customerName: sale.client.name,
+        customerName: sale.client?.name ?? "Client removed",
         total: sale.total,
         createdAt: sale.createdAt,
         items: sale.items.map((item) => ({
-            productId: item.product._id,
-            productName: item.product.name,
+            productId: item.product?._id ?? "unknown",
+            productName: item.product?.name ?? "Product removed",
             quantity: item.quantity,
             price: item.price,
         })),
