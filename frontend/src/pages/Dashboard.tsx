@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+
 import type { DashboardData } from "../types/Dashboard";
+import type { RevenueByMonth } from "../types/RevenueByMonth";
+
+import { getRevenueByMonth } from "../services/dashboardService";
+import RevenueChart from "../components/dashboard/RevenueChart";
 
 export default function Dashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
+  const [revenue, setRevenue] = useState<RevenueByMonth[]>([])
 
   useEffect(() => {
-    async function loadDashboard() {
-      const response = await api.get("/dashboard");
-      setData(response.data);
-    }
-
-    loadDashboard();
+    api.get("/dashboard").then(res => setData(res.data));
+    getRevenueByMonth().then(setRevenue);
   }, []);
 
   if (!data) {
@@ -41,6 +43,8 @@ export default function Dashboard() {
         <p className="text-gray-500">Customers</p>
         <p className="text-2xl font-bold">{data.totalCustomers}</p>
       </div>
+
+      <RevenueChart data={revenue} />
     </div>
   );
 }
