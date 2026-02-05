@@ -4,7 +4,7 @@ const saleSchema = new mongoose.Schema(
     {
         client: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Client",
+            ref: "Customer",
             required: true
         },
 
