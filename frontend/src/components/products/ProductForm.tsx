@@ -14,11 +14,13 @@ interface ProductFormData {
 interface ProductFormProps {
     initialData?: Product;
     onSaved: () => void;
+    onCancel: () => void;
 }
 
 export default function ProductForm({ 
     initialData,
     onSaved,
+    onCancel,
  }: ProductFormProps) {
     const { register, handleSubmit, reset } = useForm<ProductFormData>();
 
@@ -30,6 +32,14 @@ export default function ProductForm({
                 stock: initialData.stock,
                 category: initialData.category,
                 description: initialData.description,
+            });
+        } else {
+            reset({
+                name: "",
+                price: 0,
+                stock: 0,
+                category: "",
+                description: "",
             });
         }
     }, [initialData, reset]);
@@ -82,12 +92,29 @@ export default function ProductForm({
                 className="w-full border p-2 rounded"
             />
 
-            <button
-                type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
-            >
-                {initialData ? "Update" : "Create"}
-            </button>
+            <div className="flex gap-2">
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
+                >
+                    {initialData ? "Update" : "Create"}
+                </button>
+
+                {initialData && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            reset();
+                            onCancel();
+                        }}
+                        className="bg-red-600 text-white px-4 py-2 hover:bg-red-700 cursor-pointer"
+                    >
+                        Cancel
+                    </button>
+                )}
+
+            </div>
+
         </form>
     )
 }
