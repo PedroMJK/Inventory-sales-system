@@ -20,46 +20,49 @@ export default function ProductList({
     }
 
     return (
-       <table className="w-full border border-gray-200 bg-white rounded shadow">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2">Category</th>
-            <th className="p-2">Price</th>
-            <th className="p-2">Stock</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-
-         <tbody>
-          {products.map((product) => (
-            <tr key={product.id} className="border-t">
-              <td className="p-2">{product.name}</td>
-              <td className="p-2 text-center">{product.category}</td>
-              <td className="p-2 text-center">
-                R$ {product.price.toFixed(2)}
-              </td>
-              <td className="p-2 text-center">{product.stock}</td>
-              <td className="p-2 text-center space-x-2">
-
-                <button 
-                  onClick={() => onEdit(product)}
-                  className="text-blue-600 hover:underline cursor-pointer"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  className="text-red-600 hover:underline cursor-pointer"
-                >
-                  Delete
-                </button>
-                
-              </td>
+      <div className="hidden md:block overflow-x-auto">
+        <table className="w-full border border-gray-200 bg-white rounded shadow">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="p-2 text-left">Name</th>
+              <th className="p-2">Category</th>
+              <th className="p-2">Price</th>
+              <th className="p-2">Stock</th>
+              <th className="p-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {products.map((product) => (
+              <tr key={product.id} className="border-t">
+                <td className="p-2">{product.name}</td>
+                <td className="p-2 text-center">{product.category}</td>
+                <td className="p-2 text-center">
+                  $ {product.price.toFixed(2)}
+                </td>
+                <td className="p-2 text-center">{product.stock}</td>
+                <td className="p-2 text-center space-x-2">
+
+                  <button 
+                    onClick={() => onEdit(product)}
+                    className="text-blue-600 hover:underline cursor-pointer"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    className="text-red-600 hover:underline cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                  
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        
+      </div>
   );
 }

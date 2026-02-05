@@ -19,7 +19,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div className="p-6 bg-white rounded shadow">
         <p className="text-gray-500">Sales</p>
         <p className="text-2xl font-bold">{data.totalSales}</p>
@@ -27,8 +27,8 @@ export default function Dashboard() {
 
       <div className="p-6 bg-white rounded shadow">
         <p className="text-gray-500">Revenue</p>
-        <p className="text-2xl font-bold">
-          R$ {data.totalRevenue?.toFixed(2) ?? "0.00"}
+        <p className="sm:text-2xl text-base font-bold truncate">
+          $ {data.totalRevenue?.toFixed(2) ?? "0.00"}
         </p>
       </div>
 

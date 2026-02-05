@@ -31,19 +31,28 @@ export default function Products() {
         <div className="space-y-6">
             <h2 className="text-2xl font-bold">Products</h2>
 
-            <ProductForm 
-                initialData={selectedProduct}
-                onSaved={() => {
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+            <div className="lg:col-span-1">
+                <ProductForm
+                    initialData={selectedProduct}
+                    onSaved={() => {
                     setSelectedProduct(undefined);
                     loadProducts();
-                }}
-                onCancel={() => setSelectedProduct(undefined)}
-             />
-            <ProductList
-                products={products}
-                onEdit={setSelectedProduct}
-                onDeleted={loadProducts}
-            />
+                    }}
+                    onCancel={() => setSelectedProduct(undefined)}
+                />
+            </div>
+
+            <div className="lg:col-span-2">
+                <ProductList
+                    products={products}
+                    onEdit={setSelectedProduct}
+                    onDeleted={loadProducts}
+                />
+            </div>
+
+        </div>
         </div>
     )
 } 

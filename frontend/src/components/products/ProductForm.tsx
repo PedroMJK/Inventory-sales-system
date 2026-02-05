@@ -75,30 +75,33 @@ export default function ProductForm({
         >
             <h3 className="text-lg font-semibold">{initialData ? "Edit Product" : "New Product"}</h3>
 
-            <input
-                {...register("name")}
-                placeholder="Name"
-                className="w-full border p-2 rounded"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                    {...register("name")}
+                    placeholder="Name"
+                    className="w-full border p-2 rounded"
+                />
 
-            <input
-                {...register("category")}
-                placeholder="Category"
-                className="w-full border p-2 rounded"
-            />
+                <input
+                    {...register("category")}
+                    placeholder="Category"
+                    className="w-full border p-2 rounded"
+                />
 
-            <input
-                {...register("price", { valueAsNumber: true})}
-                type="number"
-                placeholder="Price"
-                className="w-full border p-2 rounded"
-            />
+                <input
+                    {...register("price", { valueAsNumber: true})}
+                    type="number"
+                    placeholder="Price"
+                    className="w-full border p-2 rounded"
+                />
 
-            <input
-                {...register("stock",{ valueAsNumber: true })}
-                placeholder="Stock"
-                className="w-full border p-2 rounded"
-            />
+                <input
+                    {...register("stock",{ valueAsNumber: true })}
+                    placeholder="Stock"
+                    className="w-full border p-2 rounded"
+                />
+            </div>
+
 
             <textarea  
                 {...register("description")}
@@ -106,7 +109,7 @@ export default function ProductForm({
                 className="w-full border p-2 rounded"
             />
 
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
                 <button
                     type="submit"
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
