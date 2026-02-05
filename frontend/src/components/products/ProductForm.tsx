@@ -5,8 +5,8 @@ import type { Product } from "../../types/Product";
 
 interface ProductFormData {
   name: string;
-  price: number;
-  stock: number;
+  price: number | null;
+  stock: number | null;
   category: string;
   description?: string;
 }
@@ -22,7 +22,15 @@ export default function ProductForm({
     onSaved,
     onCancel,
  }: ProductFormProps) {
-    const { register, handleSubmit, reset } = useForm<ProductFormData>();
+    const { register, handleSubmit, reset } = useForm<ProductFormData>({
+        defaultValues: {
+        name: "",
+        price: null,
+        stock: null,
+        category: "",
+        description: "",
+  },
+    });
 
     useEffect(() => {
         if (initialData) {
@@ -36,8 +44,8 @@ export default function ProductForm({
         } else {
             reset({
                 name: "",
-                price: 0,
-                stock: 0,
+                price: null,
+                stock: null,
                 category: "",
                 description: "",
             });
@@ -45,10 +53,16 @@ export default function ProductForm({
     }, [initialData, reset]);
 
     const onSubmit = async (data: ProductFormData) => {
+        const payload = {
+            ...data,
+            price: data.price ?? 0,
+            stock: data.stock ?? 0,
+        }
+
         if (initialData) {
-            await api.put(`/products/${initialData.id}`, data);
+            await api.put(`/products/${initialData.id}`, payload);
         } else {
-            await api.post("/products", data);
+            await api.post("/products", payload);
         }
 
         reset();
@@ -74,14 +88,14 @@ export default function ProductForm({
             />
 
             <input
-                {...register("price")}
+                {...register("price", { valueAsNumber: true})}
                 type="number"
                 placeholder="Price"
                 className="w-full border p-2 rounded"
             />
 
             <input
-                {...register("stock")}
+                {...register("stock",{ valueAsNumber: true })}
                 placeholder="Stock"
                 className="w-full border p-2 rounded"
             />
