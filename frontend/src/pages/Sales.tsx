@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Sale } from "../types/Sale";
 
 import { getSales } from "../services/salesService";
@@ -6,10 +6,14 @@ import { getSales } from "../services/salesService";
 import SaleForm from "../components/sales/SaleForm";
 import SaleList from "../components/sales/SaleList";
 
+const ITEMS_PER_PAGE = 5;
+
 export default function Sales() {
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
+
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     async function loadSales() {
@@ -24,6 +28,14 @@ export default function Sales() {
 
     loadSales();
   }, [reload]);
+
+  const totalPages = Math.ceil(sales.length / ITEMS_PER_PAGE);
+
+  const paginatedSales = useMemo(() => {
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    return sales.slice(start, end);
+  }, [sales, page]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -53,7 +65,30 @@ export default function Sales() {
 
       {/* List */}
       {!loading && sales.length > 0 && (
-        <SaleList sales={sales} />
+        <>
+            <SaleList sales={paginatedSales} />
+
+            {totalPages > 1 && (
+                <div className="flex justify-center gap-2 pt-4">
+                    {Array.from({ length: totalPages }).map((_, index) => {
+                        const pageNumber = index + 1;
+                        return (
+                            <button
+                                key={pageNumber}
+                                onClick={() => setPage(pageNumber)}
+                                className={`px-3 py-1 rounded border text-sm ${
+                                    page === pageNumber
+                                        ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                                        : "bg-white hover:bg-gray-100 cursor-pointer"
+                                }`}
+                            >
+                                {pageNumber}
+                            </button>
+                        )
+                    })}
+                </div>
+            )}
+        </>
       )}
     </div>
   );

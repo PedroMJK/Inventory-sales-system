@@ -36,7 +36,7 @@ export default function Customers() {
   // 1️⃣ Filter by name
   const filteredCustomers = useMemo(() => {
     return customers.filter((customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase())
+      customer.name.toLowerCase().startsWith(search.toLowerCase())
     );
   }, [customers, search]);
 
@@ -115,8 +115,8 @@ export default function Customers() {
                     onClick={() => setPage(pageNumber)}
                     className={`px-3 py-1 rounded border text-sm ${
                       page === pageNumber
-                        ? "bg-blue-600 text-white"
-                        : "bg-white hover:bg-gray-100"
+                        ? "bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
+                        : "bg-white hover:bg-gray-100 cursor-pointer"
                     }`}
                   >
                     {pageNumber}
