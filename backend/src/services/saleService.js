@@ -37,5 +37,10 @@ export const createSaleService = async ({ client, items, userId }) => {
         });
     }
 
-    return sale;
+    const populatedSale = await Sale.findById(sale._id)
+        .populate("client", "name")
+        .populate("soldBy", "name")
+        .populate("items.product", "name");
+
+    return populatedSale;
 }
