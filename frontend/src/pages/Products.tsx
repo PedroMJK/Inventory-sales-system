@@ -10,7 +10,17 @@ export default function Products() {
 
     const loadProducts = async () =>  {
         const response = await api.get("/products");
-        setProducts(response.data);
+
+        const mappedProducts = response.data.map((p: any) => ({
+            id: p._id,
+            name: p.name,
+            price: p.price,
+            stock: p.stock,
+            category: p.category,
+            description: p.description,  
+        }))
+
+        setProducts(mappedProducts);
     };
 
     useEffect(() => {
@@ -27,6 +37,7 @@ export default function Products() {
                     setSelectedProduct(undefined);
                     loadProducts();
                 }}
+                onCancel={() => setSelectedProduct(undefined)}
              />
             <ProductList
                 products={products}
@@ -35,5 +46,4 @@ export default function Products() {
             />
         </div>
     )
-}
-//   
+} 
