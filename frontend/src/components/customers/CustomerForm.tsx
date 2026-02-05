@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { createCustomer } from "../../services/customerService";
 import type { Customer } from "../../types/Customer";
 import { useEffect } from "react";
 
