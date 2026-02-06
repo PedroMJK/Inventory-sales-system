@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
-import { useAuth } from "../auth/AuthContext";
 
 interface RegisterForm {
     name: string;
@@ -11,14 +10,11 @@ interface RegisterForm {
 
 export default function Register() {
     const { register, handleSubmit } = useForm<RegisterForm>();
-    const { login } = useAuth();
     const navigate = useNavigate();
 
     const onSubmit = async (data: RegisterForm) => {
-        const response = await api.post("/auth/register", data);
-        login(response.data);
-
-        navigate("/");
+        await api.post("/auth/register", data);
+        navigate("/login");
     };
 
     return (

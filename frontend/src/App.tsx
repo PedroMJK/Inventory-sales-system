@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
+
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
@@ -9,14 +11,26 @@ import { ProtectedRoute } from "./auth/ProtectedRoute";
 import Register from "./pages/Register";
 
 export default function App() {
+  const { user } = useAuth();
+
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      {/* PUBLIC ROUTES  */}
+      <Route 
+        path="/login" 
+        element={user ? <Navigate to="/" /> : <Login />} 
+      />
+      <Route 
+        path="/register" 
+        element={user ? <Navigate to="/"/> : <Register />} 
+      />
+        {/* PRIVATE ROUTES  */}
       <Route element={
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>}>
+          <ProtectedRoute>
+             <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
         <Route path="/customers" element={<Customers />} />
