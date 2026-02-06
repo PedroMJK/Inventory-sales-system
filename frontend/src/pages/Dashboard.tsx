@@ -21,6 +21,8 @@ export default function Dashboard() {
   }
 
   return (
+    <>
+    
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div className="p-6 bg-white rounded shadow">
         <p className="text-gray-500">Sales</p>
@@ -44,7 +46,12 @@ export default function Dashboard() {
         <p className="text-2xl font-bold">{data.totalCustomers}</p>
       </div>
 
-      <RevenueChart data={revenue} />
     </div>
+
+    <div className="grid grid-cols-1 mt-6">
+        <RevenueChart data={revenue} />
+
+    </div>
+    </>
   );
 }
